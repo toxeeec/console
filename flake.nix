@@ -19,6 +19,6 @@
         configureFlags = [ "--enable-stlink" "--disable-werror" ];
         enableParallelBuilding = true;
       };
-    in { default = pkgs.mkShell { packages = [ openocd ]; }; });
+    in { default = pkgs.mkShell { packages = [ openocd pkgs.zig ]; }; });
   };
 }
