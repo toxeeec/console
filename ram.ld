@@ -6,11 +6,12 @@ MEMORY {
 }
 
 SECTIONS {
-    .text         : { *(.text .text.*) }         > CODE
-    .rodata       : { *(.rodata .rodata.*) }     > CODE
-    .ARM.exidx    : { *(.ARM.exidx*) }           > CODE
-    .data         : { *(.data .data.*) }         > DATA
-    .bss (NOLOAD) : { *(.bss .bss.*) *(COMMON) } > DATA
+    .text         : { *(.text .text.*) }           > CODE
+    .rodata       : { *(.rodata .rodata.*) }       > CODE
+    .ARM.extab    : { *(.ARM.extab .ARM.extab.*) } > CODE
+    .ARM.exidx    : { *(.ARM.exidx*) }             > CODE
+    .data         : { *(.data .data.*) }           > DATA
+    .bss (NOLOAD) : { *(.bss .bss.*) *(COMMON) }   > DATA
 
     .stack (NOLOAD) : ALIGN(8) {
         . += 4K;

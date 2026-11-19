@@ -1,3 +1,7 @@
-export fn add(a: u32, b: u32) u32 {
-    return a + b;
+export var result: u32 = 0;
+
+export fn _start() noreturn {
+    const output: *volatile u32 = &result;
+    output.* = 0x12345678;
+    while (true) {}
 }

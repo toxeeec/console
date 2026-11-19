@@ -1,7 +1,7 @@
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
-    const object = b.addObject(.{
+    const exe = b.addExecutable(.{
         .name = "console",
         .root_module = b.createModule(.{
             .root_source_file = b.path("src/main.zig"),
@@ -14,6 +14,10 @@ pub fn build(b: *std.Build) void {
             .optimize = b.standardOptimizeOption(.{}),
         }),
     });
-    const install = b.addInstallFile(object.getEmittedBin(), "console.o");
+    exe.entry = .{ .symbol_name = "_start" };
+    exe.link_gc_sections = true;
+    exe.setLinkerScript(b.path("ram.ld"));
+
+    const install = b.addInstallFile(exe.getEmittedBin(), "console.elf");
     b.getInstallStep().dependOn(&install.step);
 }
