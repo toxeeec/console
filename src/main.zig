@@ -14,12 +14,15 @@ export fn _start() noreturn {
     systick.VAL = 0;
     systick.CTRL = stm32.SysTick_CTRL_CLKSOURCE_Msk | stm32.SysTick_CTRL_ENABLE_Msk;
 
-    while (true) {
+    for (0..5) |_| {
         turn_on_ld1();
-        delay_ms(1000);
+        delay_ms(500);
         turn_off_ld1();
-        delay_ms(1000);
+        delay_ms(500);
     }
+
+    systick.CTRL = 0;
+    while (true) asm volatile ("wfi");
 }
 
 fn delay_ms(ms: u32) void {

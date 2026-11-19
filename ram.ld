@@ -5,6 +5,9 @@ MEMORY {
     DATA  (rw) : ORIGIN = 0x341C0000, LENGTH = 256K
 }
 
+__sram_load_start = ORIGIN(CODE);
+__sram_load_end = ORIGIN(DATA) + LENGTH(DATA);
+
 SECTIONS {
     .text         : { *(.text .text.*) }           > CODE
     .rodata       : { *(.rodata .rodata.*) }       > CODE

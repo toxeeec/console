@@ -25,6 +25,7 @@ pub fn build(b: *std.Build) void {
             .root_source_file = b.path("src/main.zig"),
             .target = target,
             .optimize = optimize,
+            .strip = false, // The RAM launcher reads the ELF symbol table.
         }),
     });
     exe.root_module.addImport("stm32", cmsis.createModule());
@@ -34,4 +35,11 @@ pub fn build(b: *std.Build) void {
 
     const install = b.addInstallFile(exe.getEmittedBin(), "console.elf");
     b.getInstallStep().dependOn(&install.step);
+
+    const launch = b.addSystemCommand(&.{"sh"});
+    launch.addFileArg(b.path("scripts/run-from-sram.sh"));
+    launch.addFileArg(exe.getEmittedBin());
+    launch.addFileArg(b.path("probe.cfg"));
+    launch.has_side_effects = true;
+    b.step("run", "Load the firmware into SRAM and start it").dependOn(&launch.step);
 }
