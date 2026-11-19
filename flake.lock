@@ -1,5 +1,39 @@
 {
   "nodes": {
+    "cmsis-core": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1750080842,
+        "narHash": "sha256-Ngd03c2fZJfqS4SV48TliCEtmYe3Eh2qpdOXUfSSd9U=",
+        "owner": "ARM-software",
+        "repo": "CMSIS_6",
+        "rev": "6f0a58d01aa9bd2feba212097f9afe7acd991d52",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ARM-software",
+        "ref": "v6.2.0",
+        "repo": "CMSIS_6",
+        "type": "github"
+      }
+    },
+    "cmsis-device-n6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1763019925,
+        "narHash": "sha256-9IKJvFHiWUBPTzBe1tg5rA1ivhEUXSMZ+GIUv9UOvRA=",
+        "owner": "STMicroelectronics",
+        "repo": "cmsis-device-n6",
+        "rev": "61e652bb08e87f2f0a487b06bec9aa4e8e020b74",
+        "type": "github"
+      },
+      "original": {
+        "owner": "STMicroelectronics",
+        "repo": "cmsis-device-n6",
+        "rev": "61e652bb08e87f2f0a487b06bec9aa4e8e020b74",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1794890597,
@@ -35,6 +69,8 @@
     },
     "root": {
       "inputs": {
+        "cmsis-core": "cmsis-core",
+        "cmsis-device-n6": "cmsis-device-n6",
         "nixpkgs": "nixpkgs",
         "openocd-src": "openocd-src"
       }
