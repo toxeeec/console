@@ -17,7 +17,12 @@ SECTIONS {
     .ARM.extab               : { *(.ARM.extab .ARM.extab.*) }      > CODE
     .ARM.exidx               : { *(.ARM.exidx*) }                  > CODE
     .data                    : { *(.data .data.*) }                > DATA
-    .bss (NOLOAD)            : { *(.bss .bss.*) *(COMMON) }        > DATA
+
+    .bss (NOLOAD) : {
+        __bss_start = .;
+        *(.bss .bss.*) *(COMMON)
+        __bss_end = .;
+    } > DATA
 
     .stack (ORIGIN(DATA) + LENGTH(DATA) - __stack_size) (NOLOAD) : ALIGN(8) {
         . += __stack_size;

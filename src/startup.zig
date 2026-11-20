@@ -2,6 +2,8 @@ const kernel = @import("kernel.zig");
 const stm32 = @import("stm32");
 
 extern var __stack_top: u8;
+extern var __bss_start: [0]u8;
+extern var __bss_end: [0]u8;
 
 const Handler = *const fn () callconv(.c) void;
 
@@ -49,14 +51,24 @@ export const vector_table: VectorTable linksection(".isr_vector") = .{
 };
 
 export fn reset_handler() noreturn {
+    set_vector_table();
+    clear_bss();
+    kernel.kernel_main();
+}
+
+fn set_vector_table() void {
     const scb: *volatile stm32.SCB_Type = stm32.SCB;
     scb.VTOR = @intFromPtr(&vector_table);
     asm volatile (
         \\dsb sy
         \\isb sy
         ::: .{ .memory = true });
+}
 
-    kernel.kernel_main();
+fn clear_bss() void {
+    const start: [*]u8 = &__bss_start;
+    const end: [*]u8 = &__bss_end;
+    @memset(start[0 .. end - start], 0);
 }
 
 fn default_handler() callconv(.c) void {
