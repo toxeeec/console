@@ -7,7 +7,7 @@ const systick: *volatile stm32.SysTick_Type = stm32.SysTick;
 
 const hsi_hz: u32 = 64_000_000;
 
-export fn _start() noreturn {
+pub fn kernel_main() noreturn {
     init_ld1();
 
     systick.LOAD = hsi_hz / 1000 - 1;
