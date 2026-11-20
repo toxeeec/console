@@ -10,7 +10,7 @@ const hsi_hz: u32 = 64_000_000;
 var ticks: u32 = 0;
 
 pub fn systick_handler() callconv(.c) void {
-    ticks += 1;
+    _ = @atomicRmw(u32, &ticks, .Add, 1, .monotonic);
 }
 
 pub fn kernel_main() noreturn {
@@ -32,8 +32,9 @@ pub fn kernel_main() noreturn {
 }
 
 fn delay_ms(ms: u32) void {
-    for (0..ms) |_| {
-        while ((systick.CTRL & stm32.SysTick_CTRL_COUNTFLAG_Msk) == 0) {}
+    const start = @atomicLoad(u32, &ticks, .monotonic);
+    while (@atomicLoad(u32, &ticks, .monotonic) -% start < ms) {
+        asm volatile ("wfi");
     }
 }
 
