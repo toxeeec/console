@@ -9,7 +9,7 @@ address() {
         END { if (!found) { print "Missing ELF symbol: " name > "/dev/stderr"; exit 1 } }
     '
 }
-entry=$(address _start)
+entry=$(address reset_handler)
 stack=$(address __stack_top)
 load_start=$(address __sram_load_start)
 load_end=$(address __sram_load_end)

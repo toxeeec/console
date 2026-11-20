@@ -29,7 +29,7 @@ pub fn build(b: *std.Build) void {
         }),
     });
     exe.root_module.addImport("stm32", cmsis.createModule());
-    exe.entry = .{ .symbol_name = "_start" };
+    exe.entry = .{ .symbol_name = "reset_handler" };
     exe.link_gc_sections = true;
     exe.setLinkerScript(b.path("ram.ld"));
 
