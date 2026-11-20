@@ -7,12 +7,18 @@ const systick: *volatile stm32.SysTick_Type = stm32.SysTick;
 
 const hsi_hz: u32 = 64_000_000;
 
+var ticks: u32 = 0;
+
+pub fn systick_handler() callconv(.c) void {
+    ticks += 1;
+}
+
 pub fn kernel_main() noreturn {
     init_ld1();
 
     systick.LOAD = hsi_hz / 1000 - 1;
     systick.VAL = 0;
-    systick.CTRL = stm32.SysTick_CTRL_CLKSOURCE_Msk | stm32.SysTick_CTRL_ENABLE_Msk;
+    systick.CTRL = stm32.SysTick_CTRL_CLKSOURCE_Msk | stm32.SysTick_CTRL_TICKINT_Msk | stm32.SysTick_CTRL_ENABLE_Msk;
 
     for (0..5) |_| {
         turn_on_ld1();

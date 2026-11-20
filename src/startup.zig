@@ -39,7 +39,7 @@ export const vector_table: VectorTable linksection(".isr_vector") = .{
     .debug_monitor = &default_handler,
     .reserved_13 = 0,
     .pend_sv = &default_handler,
-    .sys_tick = &default_handler,
+    .sys_tick = &kernel.systick_handler,
     .irq_handlers = blk: {
         var handlers: [195]?Handler = @splat(&default_handler);
         // Reserved IRQ numbers in the STM32N657 vector table.
