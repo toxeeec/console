@@ -1,4 +1,5 @@
 const kernel = @import("kernel.zig");
+const stm32 = @import("stm32");
 
 extern var __stack_top: u8;
 
@@ -48,6 +49,13 @@ export const vector_table: VectorTable linksection(".isr_vector") = .{
 };
 
 export fn reset_handler() noreturn {
+    const scb: *volatile stm32.SCB_Type = stm32.SCB;
+    scb.VTOR = @intFromPtr(&vector_table);
+    asm volatile (
+        \\dsb sy
+        \\isb sy
+        ::: .{ .memory = true });
+
     kernel.kernel_main();
 }
 
