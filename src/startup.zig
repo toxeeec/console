@@ -19,6 +19,7 @@ const VectorTable = extern struct {
     reserved_13: u32,
     pend_sv: Handler,
     sys_tick: Handler,
+    irq_handlers: [195]?Handler,
 };
 
 export const vector_table: VectorTable linksection(".isr_vector") = .{
@@ -36,6 +37,14 @@ export const vector_table: VectorTable linksection(".isr_vector") = .{
     .reserved_13 = 0,
     .pend_sv = &default_handler,
     .sys_tick = &default_handler,
+    .irq_handlers = blk: {
+        var handlers: [195]?Handler = @splat(&default_handler);
+        // Reserved IRQ numbers in the STM32N657 vector table.
+        for ([_]usize{ 1, 9, 15, 17, 41, 49, 50, 51, 192 }) |irq| {
+            handlers[irq] = null;
+        }
+        break :blk handlers;
+    },
 };
 
 export fn reset_handler() noreturn {
