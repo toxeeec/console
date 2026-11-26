@@ -1,7 +1,7 @@
 ENTRY(reset_handler)
 
 MEMORY {
-    CODE (rx)  : ORIGIN = 0x34180400, LENGTH = 255K
+    CODE  (rx) : ORIGIN = 0x34180400, LENGTH = 255K
     DATA  (rw) : ORIGIN = 0x341C0000, LENGTH = 256K
 }
 
@@ -25,6 +25,7 @@ SECTIONS {
     } > DATA
 
     .stack (ORIGIN(DATA) + LENGTH(DATA) - __stack_size) (NOLOAD) : ALIGN(8) {
+        __stack_limit = .;
         . += __stack_size;
         __stack_top = .;
     } > DATA

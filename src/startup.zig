@@ -2,6 +2,7 @@ const kernel = @import("kernel.zig");
 const stm32 = @import("stm32");
 
 extern var __stack_top: u8;
+extern var __stack_limit: u8;
 extern var __bss_start: [0]u8;
 extern var __bss_end: [0]u8;
 
@@ -51,6 +52,10 @@ export const vector_table: VectorTable linksection(".isr_vector") = .{
 };
 
 export fn reset_handler() noreturn {
+    asm volatile ("msr msplim, %[limit]"
+        :
+        : [limit] "r" (@intFromPtr(&__stack_limit)),
+        : .{ .memory = true });
     set_vector_table();
     clear_bss();
     kernel.kernel_main();
